@@ -1,12 +1,58 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Twitter</title>
-</head>
-<body>
-   
+    <script src="index.js" defer></script>
 
+    <link rel="stylesheet" href="style.css" />
+
+
+</head>
+
+<body>
+
+    <button onclick="Rectangular()">Choose a rectangle</button>
+    <br /><br />
+    <button id="Choice" onclick="visibility(true)">Choose a triangular</button>
+    <br /><br />
+    <button id="PerimeterT" onclick="TriangularPerimeter()" style="display: none;">Calculate the perimeter</button>
+    <button id="PrintT" onclick="printTriangular()" style="display: none;">Print the triangular</button>
+    <button id="Back" onclick="visibility(false)" style="display: none;">Return back</button>
+    <br /><br />
+    <button onclick="window.close()">Exit</button>
+    
+
+
+    <div id="output"></div>
+
+
+
+<script>
+function visibility(value)
+{
+    if(value)
+    {
+        PerimeterT.style.display = "block";
+        PrintT.style.display = "block";
+        Back.style.display = "block";
+        Choice.style.display = "none";
+
+    }
+    else
+    {
+        PerimeterT.style.display = "none";
+        PrintT.style.display = "none";
+        Back.style.display = "none";
+        Choice.style.display = "block";
+
+    }
+
+}   
+</script>
 </body>
+
 </html>
+
