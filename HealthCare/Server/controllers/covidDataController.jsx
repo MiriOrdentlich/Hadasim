@@ -26,6 +26,7 @@ const getCovidData = async (req, res) => {
 //Add new covid data
 const addCovidData = async (req, res) => {
     try {
+        console.log("fhhiiiiiiiiiijhj", req.body);
         // Create the Patient object
         const covidData  = await CovidData.create(req.body);
         res.status(200).json(covidData);
@@ -38,6 +39,7 @@ const addCovidData = async (req, res) => {
 //Update covid data
 const updatedCovidData = async (req, res) => {
     try {
+        //console.log("fhhiiiiiiiiiijhj", req.body);
         const {id} = req.params;
         const coviddata = await CovidData.findOneAndUpdate({ id: id }, req.body, { new: true });
         if(!coviddata)

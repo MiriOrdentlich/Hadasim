@@ -4,41 +4,42 @@ import viteLogo from '/vite.svg'
 import "./styles.css"
 import People from './People'
 import TopDetails from './TopDetails'
-
+import axios from 'axios';
 
 function PeopleList() {
-    const generatedList = [
-        { id: 1, fname: 'John', lname: 'Doe', city: 'New York', street:'a' ,
-        vaccinationList : [
-            { mname: "Pfizer", vDate: "2024-03-20" },
-            { mname: "Moderna", vDate: "2024-03-15" },
-            { mname: "Johnson & Johnson", vDate: "2024-03-10" },
-            { mname: "AstraZeneca", vDate: "2024-03-05" }
-          ] },
-        { id: 2, fname: 'Jane', lname: 'Smith', city: 'Los Angeles', street:'a' , 
-        vaccinationList : [
-            { mname: "Pfizer", vDate: "2024-03-20" },
-            { mname: "Pfizer", vDate: "2024-03-15" },
-            { mname: "Pfizer", vDate: "2024-03-10" },
-            { mname: "Pfizer", vDate: "2024-03-05" }
-          ]},
-        { id: 3, fname: 'Alice', lname: 'Johnson', city: 'Chicago' , street:'a' , 
-        vaccinationList : [
-            { mname: "Moderna", vDate: "2024-03-20" },
-            { mname: "Moderna", vDate: "2024-03-15" },
-            { mname: "Moderna", vDate: "2024-03-10" },
-            { mname: "Moderna", vDate: "2024-03-05" }
-          ]}
-      ];
+   
       const [peopleData, setPeopleData] = useState([]);
       const [selectedPersonId, setSelectedPersonId] = useState(null);
       const [readOnlyP, setReadOnlyP] = useState(true);
       const [visibility, setVisibility] = useState(true); //the topdetails component visibility
+      const [isShow, setIsShow] = useState(false);
+      const [isAdd, setIsAdd] = useState(false);
+      const [isEdit, setIsEdit] = useState(false);
+      const [formPatient, setFormPatient] = useState({});
+      const [formTopDetails, setFormTopDetails] = useState({});
+      const [formCovid, setFormCovid] = useState({});
 
+      useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:3000/api/patients');
+                setPeopleData(response.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+    
+        fetchData();
+    }, []);
+    
+      
       const showBtn = (personId) => {
         setSelectedPersonId(personId);
         setVisibility(false); //for the return btn
         setReadOnlyP(true);
+        setIsShow(true);
+        setIsAdd(false);
+        setIsEdit(false);
 
       };
 
@@ -46,63 +47,54 @@ function PeopleList() {
         setSelectedPersonId(personId);
         setVisibility(false);
         setReadOnlyP(false);
+        setIsShow(false);
+        setIsAdd(false);
+        setIsEdit(true);
 
       };
 
-      const deleteBtn = (personId) => {
-        //actually deletinngggggggggg
-    };
-
     const addBtn = () => {
-        setSelectedPersonId({});
-        setReadOnlyP(false);
-        setVisibility(false); //for the return btn
+      setSelectedPersonId({});
+      setReadOnlyP(false);
+      setVisibility(false); //for the return btn
+      setIsShow(false);
+      setIsAdd(true);
+      setIsEdit(false);
 
-
-        //actually addingggggggggggggggggg
-    };
+  };
 
       const returnBtn = () => {
         setSelectedPersonId(null);
         setVisibility(true);
-      };
+        setIsShow(false);
+        setIsAdd(false);
+        setIsEdit(false);
 
-      const saveBtn = () => {
-        setSelectedPersonId(null);
-        setVisibility(true);
-        //actually savinggggggggggggggggggg
       };
-
   return (
     <>
     <div className="people-list-general">
         <div className="list-Of-people">
-            <h1>Hi from peopleList</h1>
-            {generatedList.map(person => (
-            visibility &&
-            <div className="topDetails-list" key={person.id}>
-            
-            <TopDetails person={person} isReadOnly= {readOnlyP}/>
-            <button onClick={() => showBtn(person.id)}>Show Details</button>
-            <button onClick={() => editBtn(person.id)}>Edit Details</button>
-            <button onClick={() => deleteBtn(person.id)}>Delete</button>
-
-            </div>        
-        ))}
+            <h1>People List</h1>
+            {peopleData.length > 0 && peopleData.map(person => (
+          visibility &&
+          <div className="topDetails-list" key={person.id}>
+        <TopDetails person={person} isReadOnly={readOnlyP}/>
+        <button onClick={() => showBtn(person.id)}>Show Details</button>
+        <button onClick={() => editBtn(person.id)}>Edit Details</button>
+    </div>
+))}
         
-        {/* {selectedPersonId && <People person={generatedList.find(person => person.id === selectedPersonId)} isReadOnly= {readOnlyP}/> } */}
         {selectedPersonId && (
             <People
-                person={
-                generatedList.find(person => person.id === selectedPersonId) || {} // Providing an empty object if no matching person is found
+                person=
+                {peopleData.find(person => person.id === selectedPersonId) || {} // Providing an empty object if no matching person is found
                 }
-                isReadOnly={readOnlyP}
+                isReadOnly={readOnlyP} isAdd = {isAdd} isShow ={isShow} isEdit= {isEdit}
             />
             )}
 
         {!visibility && <button onClick={()=> returnBtn()}>Return</button>}
-        {!visibility && !readOnlyP && <button onClick={()=> saveBtn()}>Save</button>}
-
         <br/>
         {visibility &&<button className="add-new-member" onClick={()=> addBtn()}>Add</button>}
 

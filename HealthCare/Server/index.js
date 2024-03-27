@@ -5,17 +5,18 @@ const Patient = require('./models/patient.js');
 const CovidData = require('./models/CovidData.js');
 const patientRoute = require('./routes/patientRoute.js');
 const covidDataRoute = require('./routes/covidDataRoute.js')
+const cors = require('cors');
 
 //creates express app
 const app = express()
 
-
+app.use(cors());
 //Enable parsing of JSON bodies in incoming requests
 app.use(express.json());
 
 //routes
-app.use("/api/patients" , patientRoute);
 app.use("/api/coviddata" , covidDataRoute);
+app.use("/api/patients" , patientRoute);
 
 
 //route for handling HTTP GET requests to the root URL ("/") of the server
