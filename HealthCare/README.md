@@ -2,7 +2,7 @@ Corona management system:
 To run the project please follow the following instructions:
 
 1. Write in the terminal 'cd run dev' to activate the server
-2. Open the src folder and then run http://localhost:5173/? 
+2. Open the src folder and then terminal for that folder and then npm run dev 
 
 You will see the following:
 
