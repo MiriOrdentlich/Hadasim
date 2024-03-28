@@ -12,7 +12,7 @@ import TopDetails from './TopDetails';
     // Check if any field is empty or invalid
     for (const key in combinedPatient) {
       if (!combinedPatient[key]) {
-        error = `Please fill in the ${key} feild` ;
+        error = `Please fill in the ${key} field` ;
           return [false ,error];
       }
     }
@@ -104,9 +104,12 @@ import TopDetails from './TopDetails';
   };
 
 //check if the values are valid and also returns only the one that changed
-  export const isCovidDatatValid = (formCovid) =>
+  export const isCovidDatatValid = (formCovid ,covidOldData) =>
     {
-      let error = false;  
+      console.log('isCovidDatatValid');
+      console.log(formCovid);
+      let error = false; 
+      
       const valuableData = {};
         const pairs = [
             ['manufacturerName1', 'vaccinationDate1'],
@@ -134,13 +137,22 @@ import TopDetails from './TopDetails';
               }
             }
           }
-          if (pRDate) {
+          if (pRDate && pRDate !== covidOldData.pRDate) 
+          {
             valuableData.pRDate = pRDate;
             console.log('pRDate valid' +  pRDate);
           }
-          if (rDay) {
-            valuableData.rDay = rDay;
-            console.log('rDay valid' +  rDay);
+          if (rDay & rDay !== covidOldData.rDay) { //Can put recovery only after being sick
+            if(pRDate)
+            {
+              valuableData.rDay = rDay;
+              console.log('rDay valid' +  rDay);
+            }
+            else
+            {
+              error = 'Please provide the Positive Result Date first';
+            }
+            
           }
           return [true, valuableData , error]; //the values that changed- has a value
     };
@@ -191,8 +203,7 @@ import TopDetails from './TopDetails';
       return error; // Rethrow the error for the calling code to handle
     }
   };
-
-  export const updateDetails = async (formPatient,formTopDetails,formCovid,patientOldData,covidId ) => {
+  export const updateDetails = async ( formPatient,formTopDetails,formCovid,patientOldData,covidOldData,covidId) => {
     console.log("updateDetails");
     const { id } = formTopDetails;
     try {
@@ -208,7 +219,7 @@ import TopDetails from './TopDetails';
          return errorPatient;
        }
 
-       const [isCovidValid, valuableCovidData, errorCovid] = isCovidDatatValid(formCovid);
+       const [isCovidValid, valuableCovidData, errorCovid] = isCovidDatatValid(formCovid, covidOldData);
        if(errorCovid)
        {
          return errorCovid;
@@ -220,7 +231,7 @@ import TopDetails from './TopDetails';
       };
         
 
-        if(isValid) //there are no mistakes in the important details
+        if(isValid && isCovidValid) //there are no mistakes in the important details
         {
           
           console.log("to");

@@ -174,10 +174,28 @@ const beforeChangeDataPatient =() => {
   }
 };
 
+const beforeChangeDataCovid =() => {
+  console.log("beforeChangeDataCovid");
+  return {
+    id: CovidDataList.id,
+    pRDate: poRDate,
+    rDay: reDay,
+    manufacturerName1: CovidDataList.manufacturerName1,
+    vaccinationDate1: vaccinationDate1,
+    manufacturerName2: CovidDataList.manufacturerName2,
+    vaccinationDate2: vaccinationDate2,
+    manufacturerName3: CovidDataList.manufacturerName3,
+    vaccinationDate3: vaccinationDate3,
+    manufacturerName4: CovidDataList.manufacturerName4,
+    vaccinationDate4: vaccinationDate4,
+  }
+};
+
 const saveBtn = async (event) => {
   const formPatient = collectFormDataPatient(); 
   const formCovid = collectFormDataCovid(); 
   const patientOldData = beforeChangeDataPatient();
+  const covidOldData= beforeChangeDataCovid();
   let errorPatient = '';
   let errorCovid = '';
   const formTopDetails = {
@@ -194,7 +212,7 @@ const saveBtn = async (event) => {
     if(props.isEdit)
     {
       console.log("edit btn");
-      errorCovid = await updateDetails(formPatient,formTopDetails,formCovid,patientOldData,CovidDataList.id);
+      errorCovid = await updateDetails(formPatient,formTopDetails,formCovid,patientOldData,covidOldData,CovidDataList.id);
       //CovidDataList.id will tell if i need to create post for the covid
       //if there is no covid data at all
       //patientOldData is to know if there were any changes
@@ -210,10 +228,10 @@ const saveBtn = async (event) => {
     alert(`Error: ${errorPatient || errorCovid}`);
     event.preventDefault();
   }
-  else
-  {
-    setErrorMessage('');
-  }
+  // else
+  // {
+  //   setErrorMessage('');
+  // }
   
 };
 
