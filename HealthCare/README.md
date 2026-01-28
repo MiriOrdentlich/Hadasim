@@ -1,7 +1,4 @@
-Corona management system:
-To run the project please follow the following instructions:
-
-1. Write in the terminal 'cd run dev' to activate the server
+vate the server
 2. Open the src folder and then terminal for that folder and then npm run dev 
 
 You will see the following:
@@ -37,3 +34,4 @@ which will open the following page-
 
 Thank you for using our system,
 Hope you have a great day
+
